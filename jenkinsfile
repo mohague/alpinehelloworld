@@ -67,7 +67,7 @@ pipeline {
 
 
         stage ('Release') {
-            agen any            
+            agent any            
             steps {
                 script {
                 sh '''
@@ -79,7 +79,7 @@ pipeline {
         }
 
         stage ('Deploy in staging') {
-            agen any
+            agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
@@ -105,7 +105,7 @@ pipeline {
         }
         
         stage ('Deploy in PROD') {
-            agen any
+            agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
