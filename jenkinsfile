@@ -4,7 +4,8 @@ pipeline {
         PORT_EXPOSED = "80"
         DOCKERHUB_AUTH = credentials('DOCKERHUB_AUTH')
         ID_DOCKER = "${DOCKERHUB_AUTH_USR}"
-
+        HOSTNAME_DEPLOY_STAGING = "3.86.62.154"
+        HOSTNAME_DEPLOY_PROD = "3.81.150.168"
      }
 
     stages {
@@ -81,10 +82,7 @@ pipeline {
             agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
-            }
-            environment { 
-                HOSTNAME_DEPLOY_STAGING = '3.86.62.154'
-                }            
+            }         
             steps {
                 sshagent(credentials: ['SSH_AUTH_SERVER']) {
                     sh '''
@@ -105,12 +103,22 @@ pipeline {
             }
         }
         
+
+        stage ('Test Staging') {
+            agent any
+            steps{
+                scripts {
+                    sh '''
+                        curl ${HOSTNAME_DEPLOY_STAGING} | grep -q "Hello world!"
+                    '''
+            }
+        }
+
         stage ('Deploy in PROD') {
             agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
-            }
-            environment { HOSTNAME_DEPLOY_PROD = '3.81.150.168' }            
+            }           
             steps {
                 sshagent(credentials: ['SSH_AUTH_SERVER']) {
                     sh '''
@@ -128,6 +136,16 @@ pipeline {
                             -C "${command1} && ${command2} && ${command3} && ${command4}"
                     '''
                 }
+            }
+        }
+        
+        stage ('Test PROD') {
+            agent any
+            steps{
+                scripts {
+                    sh '''
+                        curl ${HOSTNAME_DEPLOY_PROD} | grep -q "Hello world!"
+                    '''
             }
         }                
     }
