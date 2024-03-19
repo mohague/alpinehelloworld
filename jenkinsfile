@@ -4,7 +4,7 @@ pipeline {
         PORT_EXPOSED = "80"
         // PRODUCTION = "${ID_DOCKER}-production"
         DOCKERHUB_AUTH = credentials('DOCKERHUB_AUTH')
-        ID_DOCKER = "${$DOCKER_AUTH_USR}"
+        ID_DOCKER = "${DOCKER_AUTH_USR}"
 
      }
 
@@ -72,7 +72,7 @@ pipeline {
                 script {
                 sh '''
                     echo ${DOCKERHUB_AUTH_PSW} | docker login -u ${DOCKERHUB_AUTH_USR} --password-stdin
-                    docker push {DOCKERHUB_AUTH_USR}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker push ${ID_DOCKER}/${IMAGE_NAME}:${IMAGE_TAG}
                 '''
                 }
             }
