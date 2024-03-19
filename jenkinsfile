@@ -146,8 +146,8 @@ pipeline {
                     sh '''
                         curl ${HOSTNAME_DEPLOY_PROD} | grep -q "Hello world!"
                     '''
-            }
-        }                
+                }
+            }                
+        }
     }
-
 }
