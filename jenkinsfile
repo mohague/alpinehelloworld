@@ -133,7 +133,3 @@ pipeline {
     }
 
 }
-
-  posts {
-
-  }
