@@ -2,9 +2,8 @@ pipeline {
     agent none  
     environment {
         PORT_EXPOSED = "80"
-        // PRODUCTION = "${ID_DOCKER}-production"
         DOCKERHUB_AUTH = credentials('DOCKERHUB_AUTH')
-        ID_DOCKER = "${DOCKER_AUTH_USR}"
+        ID_DOCKER = "${DOCKERHUB_AUTH_USR}"
 
      }
 
